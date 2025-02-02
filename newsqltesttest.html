@@ -27,16 +27,16 @@
           locateFile: file => `./${file}`
         });
 
-        const savedDb = await loadDatabase();
-        if (savedDb) {
-          db = new SQL.Database(new Uint8Array(savedDb));
-          log("? Loaded existing database from IndexedDB.");
-        } else {
+        //const savedDb = await loadDatabase();
+        //if (savedDb) {
+          //db = new SQL.Database(new Uint8Array(savedDb));
+          //log("? Loaded existing database from IndexedDB.");
+        //} else {
           db = new SQL.Database();
           db.run("CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT);");
           log("??? Created new database.");
           saveDatabase();
-        }
+        //}
       } catch (error) {
         log(`? Error initializing database: ${error}`);
         console.error(error);
