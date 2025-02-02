@@ -108,6 +108,16 @@
       updateUserList();  // Update the user list on the page
     }
 
+    // Remove a user from the SQL.js database
+    function removeUser(userId) {
+      // Delete the user with the given ID from the SQL.js database
+      inMemoryDb.run(`DELETE FROM users WHERE id = ?`, [userId]);
+
+      // Store the updated SQL database into IndexedDB
+      storeSQLToIndexedDB();
+      updateUserList();  // Update the user list on the page
+    }
+
     // Update the user list displayed on the webpage
     function updateUserList() {
       const users = inMemoryDb.exec("SELECT * FROM users");
@@ -119,6 +129,13 @@
         users[0].values.forEach(user => {
           const li = document.createElement("li");
           li.textContent = `${user[1]} (${user[2]}) - Random Number: ${user[3]}`;
+          
+          // Create a delete button for each user
+          const deleteButton = document.createElement("button");
+          deleteButton.textContent = "Delete";
+          deleteButton.onclick = () => removeUser(user[0]);  // Pass the user ID to remove
+
+          li.appendChild(deleteButton);  // Append the delete button next to the user
           userList.appendChild(li);
         });
       }
