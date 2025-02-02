@@ -81,7 +81,7 @@
     // Save the database to IndexedDB
     function saveDatabase() {
       const data = db.export();
-      const request = indexedDB.open("SQLiteDB", 1);
+      const request = indexedDB.open("SQLiteDB", 4);
 
       request.onupgradeneeded = () => {
         const db = request.result;
@@ -102,7 +102,7 @@
     // Load the database from IndexedDB
     function loadDatabase() {
       return new Promise(resolve => {
-        const request = indexedDB.open("SQLiteDB", 1);
+        const request = indexedDB.open("SQLiteDB", 4);
 
         request.onsuccess = () => {
           const transaction = request.result.transaction("datastore", "readonly");
