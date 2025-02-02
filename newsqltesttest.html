@@ -27,6 +27,7 @@
           locateFile: file => `./${file}`
         });
 
+        openDatabase();
         const savedDb = await loadDatabase();
         if (savedDb) {
           db = new SQL.Database(new Uint8Array(savedDb));
@@ -43,6 +44,29 @@
       }
     }
 
+
+    function openDatabase() {
+      const request = indexedDB.open("SQLiteDB", 1);  // Increment version if you modify the schema
+
+      request.onupgradeneeded = (event) => {
+        const db = event.target.result;
+        // Create object store only if it doesn't exist
+        if (!db.objectStoreNames.contains("datastore")) {
+          db.createObjectStore("datastore");
+          console.log("? 'datastore' object store created.");
+        }
+      };
+
+      request.onsuccess = (event) => {
+        console.log("? Database opened successfully.");
+      };
+
+      request.onerror = (event) => {
+        console.error("? Error opening the database.", event);
+      };
+    }
+
+    
     // Add a random user
     function addUser() {
       if (!db) {
